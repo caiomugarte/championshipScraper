@@ -59,20 +59,23 @@ function trataDate(date) {
 }
 
 function fetchData() {
-  var html = "";
-  axios.get(liquipediaURL).then((response) => {
-    html = response.data;
-    fs.writeFile(
-      path.resolve(__dirname, "cacheData", "data.html"),
-      html,
-      function (err) {
-        if (err) {
-          return console.log(err);
+  try {
+    axios.get(liquipediaURL).then((response) => {
+      html = response.data;
+      fs.writeFile(
+        path.resolve(__dirname, "cacheData", "data.html"),
+        html,
+        function (err) {
+          if (err) {
+            return console.log(err);
+          }
         }
-      }
-    );
-  });
-  return "";
+      );
+    });
+    return "";
+  } catch (error) {
+    console.log(error, error.message);
+  }
 }
 
 app.listen(PORT, () => {
@@ -94,5 +97,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/fetchData", (req, res) => {
-  res.json({ data: fetchData() });
+  res.sendFile(path.resolve(__dirname, "cacheData", "data.html"));
+  console.log(path.resolve(__dirname, "cacheData", "data.html"));
 });
