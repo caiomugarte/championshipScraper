@@ -10,38 +10,22 @@ const liquipediaURL =
 const cheerio = require("cheerio");
 
 let content = [];
-let dataCache = [];
-async function getData() {
-  try {
-    axios(liquipediaURL).then((response) => {
-      const data = response.data;
-      const $ = cheerio.load(data);
-
-      $(".divRow", data).each(function () {
-        const local = $(this)
-          .find(".EventDetails.Location.Header")
-          .find("a")
-          .attr("title");
-        const titulo = $(this).find("b").text();
-        const url = getUrlCampeonato($(this).find("b").find("a").attr("href"));
-        try {
-          axios(url).then((response) => {
-            const data = response.data;
-            const $ = cheerio.load(data);
-            console.log(data);
-          });
-        } catch (error) {
-          console.log(error, error.message);
-        }
-        content.push({
-          titulo,
-          local,
-        });
-      });
+let html = "";
+function getData(html) {
+  const $ = cheerio.load(html);
+  console.log("printando html");
+  $(".divRow", html).each(function () {
+    const local = $(this)
+      .find(".EventDetails.Location.Header")
+      .find("a")
+      .attr("title");
+    const titulo = $(this).find("b").text();
+    const url = getUrlCampeonato($(this).find("b").find("a").attr("href"));
+    content.push({
+      titulo,
+      local,
     });
-  } catch (error) {
-    console.log(error, error.message);
-  }
+  });
 }
 
 function getUrlCampeonato(href) {
@@ -87,20 +71,23 @@ function getAno(data) {
 }
 
 function fetchData() {
-  var html = "";
-  axios.get(liquipediaURL).then((response) => {
-    html = response.data;
-    fs.writeFile(
-      path.resolve(__dirname, "cacheData", "data.html"),
-      html,
-      function (err) {
-        if (err) {
-          return console.log(err);
+  try {
+    axios.get(liquipediaURL).then((response) => {
+      html = response.data;
+      fs.writeFile(
+        path.resolve(__dirname, "cacheData", "data.html"),
+        html,
+        function (err) {
+          if (err) {
+            return console.log(err);
+          }
         }
-      }
-    );
-  });
-  return "";
+      );
+    });
+    return "";
+  } catch (error) {
+    console.log(error, error.message);
+  }
 }
 
 app.listen(PORT, () => {
@@ -108,6 +95,12 @@ app.listen(PORT, () => {
 });
 
 app.get("/liquipedia", (req, res) => {
+  const file = fs.readFileSync(
+    path.resolve(__dirname, "cacheData", "data.html"),
+    "utf8"
+  );
+  getData(file);
+  //getData(fs.readFile(path.resolve(__dirname, "cacheData", "data.html")));
   console.log(content);
   res.json(content);
 });
@@ -117,5 +110,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/fetchData", (req, res) => {
-  res.json({ data: fetchData() });
+  res.sendFile(path.resolve(__dirname, "cacheData", "data.html"));
+  console.log(path.resolve(__dirname, "cacheData", "data.html"));
 });
