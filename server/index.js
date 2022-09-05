@@ -10,64 +10,52 @@ const liquipediaURL =
 const cheerio = require("cheerio");
 
 let content = [];
-let html = "";
+let cachedData = "";
+
 function getData(html) {
   const $ = cheerio.load(html);
-  console.log("printando html");
   $(".divRow", html).each(function () {
     const local = $(this)
       .find(".EventDetails.Location.Header")
       .find("a")
       .attr("title");
     const titulo = $(this).find("b").text();
-    const url = getUrlCampeonato($(this).find("b").find("a").attr("href"));
+    const data = trataDate($(this).find(".EventDetails.Date.Header").text());
     content.push({
       titulo,
       local,
+      data,
     });
   });
 }
 
-function getUrlCampeonato(href) {
-  return "https://liquipedia.net" + href;
-}
-
-function tratarDataLiquipedia(data) {
-  data = getDataLiquipedia(data);
-  console.log(data);
-  return data;
-}
-
-function getDataLiquipedia(data) {
-  var ano = getAno(data);
-  var mes = getMes(data);
-  data = data.split(" - ");
-  var dataInicio = new Date(data[0] + " " + ano);
-  var dataFinal = new Date(
-    data[0].split(" ")[0] + " " + data[3].replaceAll(",", "") + " " + ano
-  );
-  var dataInicioFormatada =
-    ("0" + dataInicio.getDate()).slice(-2) +
-    "/" +
-    ("0" + (dataInicio.getMonth() + 1)).slice(-2) +
-    "/" +
-    ano;
-  var dataFinalFormatada =
-    ("0" + dataFinal.getDate()).slice(-2) +
-    "/" +
-    ("0" + (dataFinal.getMonth() + 1)).slice(-2) +
-    "/" +
-    ano;
-  return dataInicioFormatada + " a " + dataFinalFormatada;
-}
-
-function getMes(data) {
-  if (data.length) {
+function carregaObjData(data, isInicio, isMesmoMes, ano) {
+  if (isInicio) {
+    console.log("testando inicio");
+    return new Date(`${data[0]} ${data[1]} ${ano}`);
+  }
+  if (isMesmoMes) {
+    return new Date(`${data[3]} ${data[4]} ${ano}`);
+  } else {
+    return new Date(`${data[0]} ${data[6]} ${ano}`);
   }
 }
 
-function getAno(data) {
-  return data.split(", ")[1];
+function carregaDataFormatada(objDate) {
+  return `${("0" + objDate.getDate()).slice(-2)}/${(
+    "0" +
+    (objDate.getMonth() + 1)
+  ).slice(-2)}`;
+}
+
+function trataDate(date) {
+  console.log(date);
+  var ano = date.split(", ")[1];
+  var dataPeriodoCamp = date.split(",")[0].split(" ");
+  if (dataPeriodoCamp.length > 2) {
+  } else if (dataPeriodoCamp.length > 17) {
+  } else {
+  }
 }
 
 function fetchData() {
@@ -95,14 +83,13 @@ app.listen(PORT, () => {
 });
 
 app.get("/liquipedia", (req, res) => {
-  const file = fs.readFileSync(
+  cachedData = fs.readFileSync(
     path.resolve(__dirname, "cacheData", "data.html"),
     "utf8"
   );
-  getData(file);
-  //getData(fs.readFile(path.resolve(__dirname, "cacheData", "data.html")));
-  console.log(content);
+  getData(cachedData);
   res.json(content);
+  //console.log(content);
 });
 
 app.get("/", (req, res) => {
