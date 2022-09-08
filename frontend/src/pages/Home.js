@@ -1,9 +1,21 @@
 import * as React from "react";
-import AspectRatio from "@mui/joy/AspectRatio";
+import TimeIcon from "../components/TimeIcon";
 import Box from "@mui/joy/Box";
-import Link from "@mui/joy/Link";
-import Card from "@mui/joy/Card";
-import Chip from "@mui/joy/Chip";
 import Typography from "@mui/joy/Typography";
-
-export default function InteractiveCard() {}
+export default function Home() {
+  return (
+    <>
+      <TimeIcon />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "-50px",
+        }}
+      >
+        <Typography level="display1">Bem vindo, Dancing Ratz</Typography>
+      </Box>
+    </>
+  );
+}
