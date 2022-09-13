@@ -4,6 +4,7 @@ const PORT = process.env.port || 3001;
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+const meme = require("./meme");
 //const website = "https://news.sky.com";
 const liquipediaURL =
   "https://liquipedia.net/counterstrike/Qualifier_Tournaments";
@@ -97,6 +98,11 @@ app.get("/", (req, res) => {
 });
 
 app.get("/fetchData", (req, res) => {
+  fetchData();
   res.sendFile(path.resolve(__dirname, "cacheData", "data.html"));
   console.log(path.resolve(__dirname, "cacheData", "data.html"));
+});
+
+app.get("/meme", (req, res) => {
+  meme.getDrzHistorico(req, res);
 });
