@@ -4,7 +4,7 @@ import Campeonatos from "../pages/Campeonatos";
 import ToggleTheme from "./ToggleTheme";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
-import Expenses from "../pages/Expenses";
+import Desempenho from "../pages/Desempenho";
 import Header from "../components/Header";
 import Banner from "../components/Banner";
 
@@ -15,7 +15,7 @@ export default function Principal() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="expenses" element={<Expenses />} />
+          <Route path="/desempenho" element={<Desempenho />} />
           <Route path="/campeonatos" element={<Campeonatos />} />
         </Routes>
       </BrowserRouter>

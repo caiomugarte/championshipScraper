@@ -12,13 +12,14 @@ import Home from "@mui/icons-material/Home";
 import ListDivider from "@mui/joy/ListDivider";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import Tabs from "@mui/joy/Tabs";
+import InsightsIcon from "@mui/icons-material/Insights";
 export default function Header() {
   return (
     <Box
       component="nav"
       sx={{
         flexGrow: 1,
-        maxWidth: 270,
+        maxWidth: 450,
         overflow: "auto",
         marginLeft: "auto",
         marginRight: "auto",
@@ -59,6 +60,20 @@ export default function Header() {
               <EmojiEventsIcon />
             </ListItemDecorator>
             Campeonatos
+          </ListItemButton>
+        </ListItem>
+        <ListDivider />
+        <ListItem role="none">
+          <ListItemButton
+            role="menuitem"
+            component={Link}
+            underline="none"
+            href="/desempenho"
+          >
+            <ListItemDecorator>
+              <InsightsIcon />
+            </ListItemDecorator>
+            Desempenho
           </ListItemButton>
         </ListItem>
       </List>
