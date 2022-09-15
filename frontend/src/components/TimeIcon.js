@@ -2,18 +2,19 @@ import * as React from "react";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Box from "@mui/joy/Box";
 import drz from "../images/time/drz.jpg";
+import Banner from "./Banner";
 
-export default function Home() {
+export default function TimeIcon() {
   return (
     <Box
-      sx={{
-        width: 250,
-        overflow: "auto",
-        p: 10,
-        marginLeft: "auto",
-        marginRight: "auto",
-        display: "block",
-      }}
+    sx={{
+      width: 250,
+      overflow: "auto",
+      p: 10,
+      marginLeft: "auto",
+      marginRight: "auto",
+      display: "block",
+    }}
     >
       <AspectRatio
         sx={{
@@ -25,7 +26,7 @@ export default function Home() {
         }}
         minHeight={200}
         maxHeight={1000}
-      >
+        >
         <img src={drz} alt="" />
       </AspectRatio>
     </Box>

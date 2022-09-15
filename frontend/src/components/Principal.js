@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Expenses from "../pages/Expenses";
 import Header from "../components/Header";
+import Banner from "../components/Banner";
 
 export default function Principal() {
   return (
