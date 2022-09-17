@@ -1,12 +1,16 @@
+const { default: axios } = require("axios");
 const fs = require("fs");
+var historico = "";
+var partidasId = [];
+var partidasLobby = [];
 
 module.exports = {
-  getDrzHistorico: function (req, res) {
+  getHistorico: function () {
     const axios = require("axios");
     const resultadosLobbyURL =
       "https://gamersclub.com.br/players/get_playerLobbyResults/latest/1";
     const gclubsess = "gclubsess=93b1ca845d0e943858deb03d843abf64cb651d64";
-    var data = "as";
+    var data;
     try {
       axios
         .get(resultadosLobbyURL, {
@@ -16,10 +20,45 @@ module.exports = {
         })
         .then((response) => {
           data = response.data;
-          res.json({ partidas: data.lista });
-        });
+          setHistorico(data);
+          setPartidasId(historico);
+        })
     } catch (error) {
       console.log(error, error.message);
     }
+    return historico;
   },
-};
+  
+
+  getPartidasLobbyData: function() {
+    var data;
+    partidasId.forEach(function(id) {
+      const partidasLobbyDataURL = `https://gamersclub.com.br/lobby/match/${id}/1`
+      try {
+        axios.get(partidasLobbyDataURL).then((response) => {
+          data = response.data;
+          setPartidasLobby(data);
+        })
+      } catch (error) {
+        console.log(error, error.message);
+      }
+    })
+    return partidasLobby;
+  }
+}
+
+
+function setHistorico(data) {
+  historico = data.lista;
+}
+
+function setPartidasId(partidas) {
+  partidas.forEach(function (partida) {
+    partidasId.push(partida.idlobby_game);
+  })
+}
+
+function setPartidasLobby(data) {
+  partidasLobby = "asd";
+}
+

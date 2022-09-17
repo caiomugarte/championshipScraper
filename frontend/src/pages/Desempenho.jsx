@@ -2,30 +2,23 @@ import React from "react";
 
 const axios = require("axios");
 
-
-function testePartida(partida){
-  console.log(partida.clanTag_a)
-}
-
-export default function Expenses() {
-  const [partidasLobby, setPartidasLobby] = React.useState([]);
-
-  React.useEffect(() => {
-    async function getData() {
+export default function Desempenho() {
+  var partidas;
+  var partidasLobby = [];  
+  async function getData() {
       const response = await axios.get("/meme");
-      setPartidasLobby(response.data);
-      console.log(response.data);
-      console.log("printando a var");
-      console.log(partidasLobby)
+      partidas = await response.data.partidas;
+      partidas.forEach(function(partida, index) {
+        partidasLobby.push(partida.idlobby_game);
+      })
     }
     getData();
-  }, []);
-  partidasLobby.forEach(testePartida)
+  
+  async function getDataPartidas(){
+  }
   return (
     <div>
-        {partidasLobby.map((partidas) => (
-          <h1>{partidas.clanTag_a}</h1>
-        ))} 
+      <h1>as</h1>
     </div>
     
   );

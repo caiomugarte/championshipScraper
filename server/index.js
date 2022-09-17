@@ -104,5 +104,5 @@ app.get("/fetchData", (req, res) => {
 });
 
 app.get("/meme", (req, res) => {
-  meme.getDrzHistorico(req, res);
+  res.json({historico : meme.getHistorico(), partidasLobbyData : meme.getPartidasLobbyData()})
 });
