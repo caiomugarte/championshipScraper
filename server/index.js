@@ -9,6 +9,7 @@ const meme = require("./meme");
 const liquipediaURL =
   "https://liquipedia.net/counterstrike/Qualifier_Tournaments";
 const cheerio = require("cheerio");
+const { response } = require("express");
 
 let content = [];
 let cachedData = "";
@@ -103,6 +104,6 @@ app.get("/fetchData", (req, res) => {
   console.log(path.resolve(__dirname, "cacheData", "data.html"));
 });
 
-app.get("/meme", (req, res) => {
-  res.json({historico : meme.getHistorico(), partidasLobbyData : meme.getPartidasLobbyData()})
+app.get("/meme", async (req, res) => {
+  meme.getData(req, res);
 });
