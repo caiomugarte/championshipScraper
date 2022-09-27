@@ -1,14 +1,16 @@
 const { default: axios } = require("axios");
 const fs = require("fs");
 
-var urlTeste = []
 var partidas = [];
 module.exports = {
   getData: async function(req, res){
     var historico = await getHistorico();
-    await setPartidas(historico);
+    var partidasId = getPartidasId(historico);
+    var partidasURL = getPartidasURL(partidasId);
+    var partidasPromises = getPartidasPromises(partidasURL);
+    partidas = await getPartidas(partidasPromises);
     
-    trataResponse(historico, req, res)
+    trataResponse(partidas, req, res)
   },
 }
 
@@ -19,14 +21,40 @@ function getPartidasId(historico){
   })
   return partidasId
 }
-async function setPartidas(historico) {
-  var partidasId = getPartidasId(historico);
-  axios.all(partidasId, 
-  console.log(urlTeste);
+function getPartidasPromises(urls){
+  var arrayPromises = []; 
+  urls.map(function (url) {
+    arrayPromises.push(axios.get(url));
+  })
+  return arrayPromises;
 }
 
-function trataResponse(historico,  req, res) {
-  res.json({historico: historico })
+async function getPartidas(promises) {
+  var arrayPartidas = [];
+  axios.all(promises).then(axios.spread((...responses) => {
+    responses.map(function (response){
+      console.log(response.data.id)
+      arrayPartidas.push(response.data);
+    });
+    return arrayPartidas;
+  }))
+}
+
+function getDadosPartidas(response) {
+  return [2, 3, 4];
+}
+
+function getPartidasURL(partidasId) {
+  var arrayURL = [];
+  partidasId.map(function (id) {
+    var url = "https://gamersclub.com.br/lobby/match/" +id+ "/1"
+    arrayURL.push(url);
+  })
+  return arrayURL;
+}
+
+function trataResponse(partidas,  req, res) {
+  res.json({partidas: partidas })
 }
 
 async function getHistorico() {
