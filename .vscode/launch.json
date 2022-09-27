@@ -7,14 +7,11 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch URL Shortener",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\server\\meme.js",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
+            "program": "${workspaceFolder}/server/index.js"
         }
     ]
 }
