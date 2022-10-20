@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.12",
+    "demofile": "^2.9.2",
     "express": "^4.18.1",
     "yarn": "^1.22.19"
   },
