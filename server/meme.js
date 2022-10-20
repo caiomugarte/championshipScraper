@@ -2,8 +2,8 @@ const { default: axios } = require("axios");
 const fs = require("fs");
 
 module.exports = {
-  getData: async function (req, res) {
-    var historico = await getHistorico();
+  getData: async function (req, res, paginaDados) {
+    var historico = await getHistorico(paginaDados);
     var partidasId = getPartidasId(historico);
     var partidasURL = getPartidasURL(partidasId);
     getPartidas(partidasURL, historico, res);
@@ -34,7 +34,7 @@ function getPartidasId(historico) {
   return partidasId;
 }
 
-function getPartidasURL(partidasId) {
+function  getPartidasURL(partidasId) {
   var arrayURL = [];
   partidasId.map(function (id) {
     var url = "https://gamersclub.com.br/lobby/match/" + id + "/1";
@@ -47,10 +47,10 @@ function trataResponse(partidas, historico, res) {
   res.json({ partidas: partidas, historico: historico });
 }
 
-async function getHistorico() {
+async function getHistorico(paginaHistorico) {
   const axios = require("axios");
   const resultadosLobbyURL =
-    "https://gamersclub.com.br/players/get_playerLobbyResults/latest/1";
+    "https://gamersclub.com.br/players/get_playerLobbyResults/latest/" + paginaHistorico;
   const gclubsess = "gclubsess=93b1ca845d0e943858deb03d843abf64cb651d64";
   try {
     var response = await axios.get(resultadosLobbyURL, {
