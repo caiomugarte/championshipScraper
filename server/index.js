@@ -108,11 +108,3 @@ app.get("/meme", async (req, res) => {
   const paginaDados = req.query.pagina;
   meme.getData(req, res, paginaDados);
 });
-
-app.get("/teste", (req, res) => {
-  const fs = require("fs");
-  const demofile = require("demofile");
-  
-  const demoFile = new demofile.DemoFile();
-  
-})
