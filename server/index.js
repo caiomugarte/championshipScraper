@@ -43,13 +43,6 @@ function carregaObjData(data, isInicio, isMesmoMes, ano) {
   }
 }
 
-function carregaDataFormatada(objDate) {
-  return `${("0" + objDate.getDate()).slice(-2)}/${(
-    "0" +
-    (objDate.getMonth() + 1)
-  ).slice(-2)}`;
-}
-
 function trataDate(date) {
   console.log(date);
   var ano = date.split(", ")[1];
@@ -105,6 +98,9 @@ app.get("/fetchData", (req, res) => {
 });
 
 app.get("/meme", async (req, res) => {
-  const paginaDados = req.query.pagina;
+  var paginaDados = req.query.pagina;
+  if (paginaDados == undefined) {
+    paginaDados = 1;
+  }
   meme.getData(req, res, paginaDados);
 });

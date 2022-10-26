@@ -18,8 +18,12 @@ async function getPartidas(urls, historico, res) {
   var partidas = [];
   Promise.all(
     urls.map(async (url) => {
-      var response = await axios.get(url);
-      partidas.push(response.data);
+      try {
+        var response = await axios.get(url);
+        partidas.push(response.data);
+      } catch (error) {
+        console.log(error, error.message);
+      }
     })
   ).then(function () {
     trataResponse(partidas, historico, res);
@@ -34,7 +38,7 @@ function getPartidasId(historico) {
   return partidasId;
 }
 
-function  getPartidasURL(partidasId) {
+function getPartidasURL(partidasId) {
   var arrayURL = [];
   partidasId.map(function (id) {
     var url = "https://gamersclub.com.br/lobby/match/" + id + "/1";
@@ -50,7 +54,8 @@ function trataResponse(partidas, historico, res) {
 async function getHistorico(paginaHistorico) {
   const axios = require("axios");
   const resultadosLobbyURL =
-    "https://gamersclub.com.br/players/get_playerLobbyResults/latest/" + paginaHistorico;
+    "https://gamersclub.com.br/players/get_playerLobbyResults/latest/" +
+    paginaHistorico;
   const gclubsess = "gclubsess=93b1ca845d0e943858deb03d843abf64cb651d64";
   try {
     var response = await axios.get(resultadosLobbyURL, {
