@@ -7,6 +7,7 @@ import Home from "../pages/Home";
 import Desempenho from "../pages/Desempenho";
 import Header from "../components/Header";
 import Banner from "../components/Banner";
+import PartidasRound from "../components/PartidasRound";
 
 export default function Principal() {
   return (
@@ -17,6 +18,7 @@ export default function Principal() {
           <Route path="/" element={<Home />} />
           <Route path="/desempenho" element={<Desempenho />} />
           <Route path="/campeonatos" element={<Campeonatos />} />
+          <Route path="/partidasRound" element={<PartidasRound />} />
         </Routes>
       </BrowserRouter>
     </div>

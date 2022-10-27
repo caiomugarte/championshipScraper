@@ -73,6 +73,8 @@ function fetchData() {
   }
 }
 
+app.use(express.static(path.resolve(__dirname, "../frontend/build")));
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
@@ -103,4 +105,8 @@ app.get("/meme", async (req, res) => {
     paginaDados = 1;
   }
   meme.getData(req, res, paginaDados);
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
 });

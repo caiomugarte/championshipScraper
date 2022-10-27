@@ -5,12 +5,13 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import Typography from "@mui/joy/Typography";
 import AspectRatio from "@mui/joy/AspectRatio";
-import CardOverflow from "@mui/joy/CardOverflow";
 import MirageFoto from "../images/mapa/mirage.jpg";
+import TextField from "@mui/joy/TextField";
 import InfernoFoto from "../images/mapa/inferno.jpg";
 import OverpassFoto from "../images/mapa/overpass.jpg";
 import DustFoto from "../images/mapa/dust.jpg";
 import { alpha } from "@mui/material";
+import Link from "@mui/joy/Link";
 
 const axios = require("axios");
 var partidas = [];
@@ -23,6 +24,21 @@ const mapas = {
   de_overpass: <img src={OverpassFoto} alt="" />,
   de_dust2: <img src={DustFoto} alt="" />,
 };
+
+function getRoundPartida(partidaId, isTR) {
+  var query = "";
+  if (isTR) {
+    query = `${partidaId}roundsTR`;
+  } else {
+    query = `${partidaId}roundsCT`;
+  }
+  var round = localStorage.getItem(query);
+  if (round) {
+    return round;
+  } else {
+    return 0;
+  }
+}
 
 function setPartidasTime(fetchedPartida) {
   console.log(fetchedPartida);
@@ -90,69 +106,89 @@ export default function Desempenho() {
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexWrap: "wrap",
-        margin: "0 auto",
-        gap: 2,
-      }}
-    >
-      {partidas.map((partida) => {
-        return (
-          <Card
-            variant="outlined"
-            sx={{
-              gap: 2,
-              minWidth: "500px",
-              maxWidth: "500px",
-              maxHeight: "450px",
-              minHeight: "450px",
-              backgroundColor: alpha(trataResultadoCardCor(partida), 0.05),
-            }}
-          >
-            <Box
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: 2,
+        }}
+      >
+        <Typography level="display1">Partidas</Typography>
+        <Button component={Link} href="/partidasRound">
+          Editar Partidas
+        </Button>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexWrap: "wrap",
+          margin: "0 auto",
+          gap: 2,
+          padding: "50px",
+        }}
+      >
+        {partidas.map((partida) => {
+          return (
+            <Card
+              variant="outlined"
+              id={partida.id}
               sx={{
-                display: "flex",
-                justifyContent: "center",
+                gap: 2,
+                minWidth: "500px",
+                maxWidth: "500px",
+                maxHeight: "450px",
+                minHeight: "450px",
+                backgroundColor: alpha(trataResultadoCardCor(partida), 0.05),
               }}
             >
-              <Typography level="h4">
-                {partida.time_a} vs {partida.time_b}
-              </Typography>
-            </Box>
-            <AspectRatio sx={{ my: 2 }} ratio="2">
-              {setMapaImage(partida)}
-            </AspectRatio>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Typography level="h4">
-                {partida.jogos.score_a} X {partida.jogos.score_b}
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Button
+              <Box
                 sx={{
-                  backgroundColor: alpha(trataResultadoCardCor(partida), 0.5),
+                  display: "flex",
+                  justifyContent: "center",
                 }}
               >
-                Ver Detalhes
-              </Button>
-            </Box>
-          </Card>
-        );
-      })}
+                <Typography level="h4">
+                  {partida.time_a} vs {partida.time_b}
+                </Typography>
+              </Box>
+              <AspectRatio sx={{ my: 2 }} ratio="2">
+                {setMapaImage(partida)}
+              </AspectRatio>
+              <Box
+                sx={{
+                  display: "block",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                  margin: "0 auto",
+                  gap: 2,
+                }}
+              >
+                <Typography level="h4">
+                  Placar: {partida.jogos.score_a} X {partida.jogos.score_b}
+                </Typography>
+                <Typography level="h4">
+                  Round TR: {getRoundPartida(partida.id, true)}
+                </Typography>
+                <Typography level="h4">
+                  Round CT: {getRoundPartida(partida.id, false)}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              ></Box>
+            </Card>
+          );
+        })}
+      </Box>
     </Box>
   );
 }

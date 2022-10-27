@@ -13,17 +13,16 @@ import ListDivider from "@mui/joy/ListDivider";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import Tabs from "@mui/joy/Tabs";
 import InsightsIcon from "@mui/icons-material/Insights";
+import ModeToggle from "./ModeToggle";
 export default function Header() {
   return (
     <Box
       component="nav"
       sx={{
-        flexGrow: 1,
-        maxWidth: 450,
-        overflow: "auto",
-        marginLeft: "auto",
-        marginRight: "auto",
-        display: "block",
+        display: "flex",
+        justifyContent: "center",
+        margin: "0 auto",
+        marginLeft: "700px",
       }}
     >
       <List
@@ -35,6 +34,12 @@ export default function Header() {
           "--List-gap": "1px",
         }}
       >
+        <ListItem role="none">
+          <ListItemDecorator>
+            <ModeToggle />
+          </ListItemDecorator>
+        </ListItem>
+        <ListDivider />
         <ListItem role="none">
           <ListItemButton
             role="menuitem"
