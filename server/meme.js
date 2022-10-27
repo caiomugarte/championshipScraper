@@ -11,12 +11,9 @@ module.exports = {
   },
 };
 
-function funcaoTeste(teste) {
-  console.log(teste);
-}
 async function getPartidas(urls, historico, res) {
   var partidas = [];
-  Promise.all(
+  await Promise.all(
     urls.map(async (url) => {
       try {
         var response = await axios.get(url);
