@@ -73,14 +73,8 @@ function fetchData() {
   }
 }
 
-app.use(express.static(path.resolve(__dirname, "../frontend/build")));
-
-app.listen(process.env.PORT || 3000, function () {
-  console.log(
-    "Express server listening on port %d in %s mode",
-    this.address().port,
-    app.settings.env
-  );
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}!`);
 });
 
 app.get("/liquipedia", (req, res) => {
@@ -91,6 +85,10 @@ app.get("/liquipedia", (req, res) => {
   getData(cachedData);
   res.json(content);
   //console.log(content);
+});
+
+app.get("/", (req, res) => {
+  res.json("hello world");
 });
 
 app.get("/fetchData", (req, res) => {
@@ -105,8 +103,4 @@ app.get("/meme", async (req, res) => {
     paginaDados = 1;
   }
   meme.getData(req, res, paginaDados);
-});
-
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
 });
