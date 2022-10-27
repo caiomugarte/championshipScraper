@@ -91,10 +91,6 @@ app.get("/liquipedia", (req, res) => {
   //console.log(content);
 });
 
-app.get("/", (req, res) => {
-  res.json("hello world");
-});
-
 app.get("/fetchData", (req, res) => {
   fetchData();
   res.sendFile(path.resolve(__dirname, "cacheData", "data.html"));
