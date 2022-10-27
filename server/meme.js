@@ -13,7 +13,7 @@ module.exports = {
 
 async function getPartidas(urls, historico, res) {
   var partidas = [];
-  await Promise.all(
+  Promise.all(
     urls.map(async (url) => {
       try {
         var response = await axios.get(url);
