@@ -12,17 +12,16 @@ module.exports = {
 };
 
 async function getPartidas(urls, historico, res) {
-  var partidas = [];
-  Promise.all(
-    urls.map(async (url) => {
-      try {
-        var response = await axios.get(url);
-        partidas.push(response.data);
-      } catch (error) {
-        console.log(error, error.message);
-      }
-    })
-  ).then(function () {
+  var partidas;
+  urls.map(async (url) => {
+    try {
+      var response = await axios.get(url);
+      partidas.push(response.data);
+    } catch (error) {
+      console.log(error, error.message);
+    }
+  });
+  partidas.then(function () {
     trataResponse(partidas, historico, res);
   });
 }
