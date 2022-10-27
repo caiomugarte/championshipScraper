@@ -104,3 +104,9 @@ app.get("/meme", async (req, res) => {
   }
   meme.getData(req, res, paginaDados);
 });
+
+app.use(express.static(path.resolve(__dirname, "../frontend/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
+});
