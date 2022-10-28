@@ -12,7 +12,7 @@ const axios = require("axios");
 var campeonatos = [];
 
 function preencheCampeonatos(campeonato) {
-  if (campeonato.local === "South America") {
+  if (campeonato.local === "South America" || campeonato.local === "Brazil") {
     campeonatos.push(campeonato);
   }
   console.log(campeonato);
@@ -25,14 +25,12 @@ export default function Campeonatos() {
     async function getData() {
       const response = await axios.get("/liquipedia");
       setcampeonatosLiquipedia(response.data);
-
-      console.log(response.data);
     }
+    console.log("use effect");
     getData();
   }, []);
 
   campeonatosLiquipedia.forEach(preencheCampeonatos);
-
   return (
     <div>
       <Typography level="h1">Campeonatos</Typography>

@@ -15,8 +15,10 @@ let content = [];
 let cachedData = "";
 
 function getData(html) {
+  content = [];
   const $ = cheerio.load(html);
   $(".divRow", html).each(function () {
+    console.log("oi");
     const local = $(this)
       .find(".EventDetails.Location.Header")
       .find("a")
@@ -44,7 +46,6 @@ function carregaObjData(data, isInicio, isMesmoMes, ano) {
 }
 
 function trataDate(date) {
-  console.log(date);
   var ano = date.split(", ")[1];
   var dataPeriodoCamp = date.split(",")[0].split(" ");
   if (dataPeriodoCamp.length > 2) {
@@ -55,6 +56,7 @@ function trataDate(date) {
 
 function fetchData() {
   try {
+    console.log("ue n tá funcionado?");
     axios.get(liquipediaURL).then((response) => {
       html = response.data;
       fs.writeFile(
@@ -94,7 +96,7 @@ app.get("/liquipedia", (req, res) => {
 
 app.get("/fetchData", (req, res) => {
   fetchData();
-  res.sendFile(path.resolve(__dirname, "cacheData", "data.html"));
+  res.json({ mensagem: "Cache Campeonatos Atualizado com sucesso" });
   console.log(path.resolve(__dirname, "cacheData", "data.html"));
 });
 
