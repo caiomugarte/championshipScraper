@@ -86,7 +86,7 @@ export default function Desempenho() {
 
   React.useEffect(() => {
     async function getData() {
-      const response = await axios.get(`/meme`);
+      const response = await axios.get(`/partidas`);
       //fetchedPartidas.push(response.data.partidas)
       setFetchedPartidas((fetchedPartidas) => [
         ...fetchedPartidas,
