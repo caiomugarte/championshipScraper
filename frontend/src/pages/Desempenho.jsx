@@ -85,25 +85,20 @@ export default function Desempenho() {
   const [fetchedPartidas, setFetchedPartidas] = useState([]);
 
   React.useEffect(() => {
-    async function getData(valorInput) {
-      const response = await axios.get(`/meme?pagina=${valorInput}`);
+    async function getData() {
+      const response = await axios.get(`/meme`);
       //fetchedPartidas.push(response.data.partidas)
       setFetchedPartidas((fetchedPartidas) => [
         ...fetchedPartidas,
         response.data.partidas,
       ]);
     }
-    var tamanhoHistorico = 5;
-    for (let index = 1; index <= tamanhoHistorico; index++) {
-      getData(index);
-    }
+    getData();
   }, []);
 
   //setPartidas(fetchedPartidas)
   console.log(fetchedPartidas);
-  if (fetchedPartidas.length == 5) {
-    fetchedPartidas.forEach(setPartidasTime);
-  }
+  fetchedPartidas.forEach(setPartidasTime);
 
   return (
     <Box>
