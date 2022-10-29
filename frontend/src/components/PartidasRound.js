@@ -47,8 +47,8 @@ export default function PartidasRound() {
   const [fetchedPartidas, setFetchedPartidas] = React.useState([]);
 
   React.useEffect(() => {
-    async function getData(valorInput) {
-      const response = await axios.get(`/meme?pagina=${valorInput}`);
+    async function getData() {
+      const response = await axios.get(`/paginas`);
       //fetchedPartidas.push(response.data.partidas)
       setFetchedPartidas((fetchedPartidas) => [
         ...fetchedPartidas,
@@ -61,9 +61,7 @@ export default function PartidasRound() {
     }
   }, []);
   console.log(fetchedPartidas);
-  if (fetchedPartidas.length == 5) {
-    fetchedPartidas.forEach(setPartidasTime);
-  }
+  fetchedPartidas.forEach(setPartidasTime);
 
   return (
     <Box

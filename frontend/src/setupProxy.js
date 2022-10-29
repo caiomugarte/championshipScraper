@@ -4,7 +4,7 @@ const proxy = {
   changeOrigin: true,
 };
 module.exports = function (app) {
-  app.use("/meme", createProxyMiddleware(proxy));
+  app.use("/paginas", createProxyMiddleware(proxy));
   app.use("/liquipedia", createProxyMiddleware(proxy));
   app.use("/fetchdata", createProxyMiddleware(proxy));
 };
