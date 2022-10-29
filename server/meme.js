@@ -15,10 +15,12 @@ module.exports = {
 function getPartidasId(historicosPartidas) {
   var idPartidas = [];
   historicosPartidas.map((historico) => {
-    historico.map((partida) => {
-      var id = partida.idlobby_game;
-      idPartidas.push(id);
-    });
+    if (historico !== undefined) {
+      historico.map((partida) => {
+        var id = partida.idlobby_game;
+        idPartidas.push(id);
+      });
+    }
   });
   return idPartidas;
 }
