@@ -55,10 +55,7 @@ export default function PartidasRound() {
         response.data.partidas,
       ]);
     }
-    var tamanhoHistorico = 5;
-    for (let index = 1; index <= tamanhoHistorico; index++) {
-      getData(index);
-    }
+    getData();
   }, []);
   console.log(fetchedPartidas);
   fetchedPartidas.forEach(setPartidasTime);
