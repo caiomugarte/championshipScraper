@@ -62,7 +62,7 @@ function trataDate(date) {
   }
 }
 
-function fetchDataCampeonatos() {
+async function fetchDataCampeonatos() {
   try {
     axios.get(liquipediaURL).then((response) => {
       html = response.data;
@@ -107,7 +107,12 @@ app.get("/liquipedia", (req, res) => {
   //console.log(content);
 });
 
-app.get("/meme", (req, res) => {
+app.get("/fetchData", async (req, res) => {
+  fetchDataCampeonatos();
+  fetchDataPartidas(req, res);
+});
+
+app.get("/partidas", async (req, res) => {
   cachedPartidas = fs.readFileSync(
     path.resolve(__dirname, "cacheData", "partidas.json"),
     "utf8"
@@ -115,13 +120,6 @@ app.get("/meme", (req, res) => {
   res.json({ partidas: getPartidas(cachedPartidas) });
   //console.log(content);
 });
-
-app.get("/fetchData", (req, res) => {
-  fetchDataCampeonatos();
-  fetchDataPartidas(req, res);
-});
-
-app.get("/partidas", async (req, res) => {});
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
