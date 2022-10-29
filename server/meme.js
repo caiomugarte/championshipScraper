@@ -1,37 +1,54 @@
 const { default: axios } = require("axios");
 const fs = require("fs");
+const path = require("path");
 
 module.exports = {
-  getData: async function (req, res, paginaDados) {
-    var historico = await getHistorico(paginaDados);
-    var partidasId = getPartidasId(historico);
+  getData: async function () {
+    var paginaDados = 5;
+    var historicosPartidas = await getHistorico(paginaDados);
+    var partidasId = getPartidasId(historicosPartidas);
     var partidasURL = getPartidasURL(partidasId);
-    getPartidas(partidasURL, historico, res);
-    //partidas = await getPartidas(partidasURL);
+    setPartidas(partidasURL);
   },
 };
 
-async function getPartidas(urls, historico, res) {
-  var partidas;
-  urls.map(async (url) => {
-    try {
-      var response = await axios.get(url);
-      partidas.push(response.data);
-    } catch (error) {
-      console.log(error, error.message);
-    }
+function getPartidasId(historicosPartidas) {
+  var idPartidas = [];
+  historicosPartidas.map((historico) => {
+    historico.map((partida) => {
+      var id = partida.idlobby_game;
+      idPartidas.push(id);
+    });
   });
-  partidas.then(function () {
-    trataResponse(partidas, historico, res);
+  return idPartidas;
+}
+
+async function setPartidas(urls) {
+  var partidas = [];
+  Promise.all(
+    urls.map(async (url) => {
+      try {
+        var response = await axios.get(url);
+        partidas.push(await response.data);
+      } catch (error) {
+        console.log(error, error.message);
+      }
+    })
+  ).then(() => {
+    setarJsonPartidas(partidas);
   });
 }
 
-function getPartidasId(historico) {
-  var partidasId = [];
-  historico.map(function (historicoObj) {
-    partidasId.push(historicoObj.idlobby_game);
-  });
-  return partidasId;
+function setarJsonPartidas(partidas) {
+  fs.writeFile(
+    path.resolve(__dirname, "cacheData", "partidas.json"),
+    JSON.stringify(partidas),
+    function (err) {
+      if (err) {
+        return console.log(err);
+      }
+    }
+  );
 }
 
 function getPartidasURL(partidasId) {
@@ -47,21 +64,24 @@ function trataResponse(partidas, historico, res) {
   res.json({ partidas: partidas, historico: historico });
 }
 
-async function getHistorico(paginaHistorico) {
+async function getHistorico(paginaDados) {
+  var arrayHistorico = [];
   const axios = require("axios");
-  const resultadosLobbyURL =
-    "https://gamersclub.com.br/players/get_playerLobbyResults/latest/" +
-    paginaHistorico;
-  const gclubsess = "gclubsess=93b1ca845d0e943858deb03d843abf64cb651d64";
-  try {
-    var response = await axios.get(resultadosLobbyURL, {
-      headers: {
-        cookie: gclubsess,
-      },
-    });
-    var historico = response.data.lista;
-    return historico;
-  } catch (error) {
-    console.log(error, error.message);
+  for (let index = 0; index <= paginaDados; index++) {
+    const resultadosLobbyURL =
+      "https://gamersclub.com.br/players/get_playerLobbyResults/latest/" +
+      index;
+    const gclubsess = "gclubsess=93b1ca845d0e943858deb03d843abf64cb651d64";
+    try {
+      var response = await axios.get(resultadosLobbyURL, {
+        headers: {
+          cookie: gclubsess,
+        },
+      });
+      arrayHistorico.push(response.data.lista);
+    } catch (error) {
+      console.log(error, error.message);
+    }
   }
+  return arrayHistorico;
 }

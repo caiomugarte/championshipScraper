@@ -12,13 +12,21 @@ const cheerio = require("cheerio");
 const { response } = require("express");
 
 let content = [];
-let cachedData = "";
+let cachedPartidas = "";
+
+function getPartidas(json) {
+  var content = [];
+  const partidas = JSON.parse(json);
+  partidas.map((partida) => {
+    content.push(partida);
+  });
+  return content;
+}
 
 function getData(html) {
   content = [];
   const $ = cheerio.load(html);
   $(".divRow", html).each(function () {
-    console.log("oi");
     const local = $(this)
       .find(".EventDetails.Location.Header")
       .find("a")
@@ -54,9 +62,8 @@ function trataDate(date) {
   }
 }
 
-function fetchData() {
+function fetchDataCampeonatos() {
   try {
-    console.log("ue n tá funcionado?");
     axios.get(liquipediaURL).then((response) => {
       html = response.data;
       fs.writeFile(
@@ -74,6 +81,12 @@ function fetchData() {
     console.log(error, error.message);
   }
 }
+
+async function fetchDataPartidas(req, res) {
+  meme.getData(req, res).then(() => {
+    res.json({ mensagem: "Terminei de getData, cache atualizado com sucesso" });
+  });
+}
 app.use(express.static(path.resolve(__dirname, "../frontend/build")));
 
 app.listen(process.env.PORT || 3000, function () {
@@ -85,28 +98,30 @@ app.listen(process.env.PORT || 3000, function () {
 });
 
 app.get("/liquipedia", (req, res) => {
-  cachedData = fs.readFileSync(
+  cachedPartidas = fs.readFileSync(
     path.resolve(__dirname, "cacheData", "data.html"),
     "utf8"
   );
-  getData(cachedData);
+  getData(cachedPartidas);
   res.json(content);
   //console.log(content);
 });
 
-app.get("/fetchData", (req, res) => {
-  fetchData();
-  res.json({ mensagem: "Cache Campeonatos Atualizado com sucesso" });
-  console.log(path.resolve(__dirname, "cacheData", "data.html"));
+app.get("/meme", (req, res) => {
+  cachedPartidas = fs.readFileSync(
+    path.resolve(__dirname, "cacheData", "partidas.json"),
+    "utf8"
+  );
+  res.json({ partidas: getPartidas(cachedPartidas) });
+  //console.log(content);
 });
 
-app.get("/meme", async (req, res) => {
-  var paginaDados = req.query.pagina;
-  if (paginaDados == undefined) {
-    paginaDados = 1;
-  }
-  meme.getData(req, res, paginaDados);
+app.get("/fetchData", (req, res) => {
+  fetchDataCampeonatos();
+  fetchDataPartidas(req, res);
 });
+
+app.get("/partidas", async (req, res) => {});
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
