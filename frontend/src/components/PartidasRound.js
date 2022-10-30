@@ -48,7 +48,7 @@ export default function PartidasRound() {
 
   React.useEffect(() => {
     async function getData() {
-      const response = await axios.get(`/paginas`);
+      const response = await axios.get(`/partidas`);
       //fetchedPartidas.push(response.data.partidas)
       setFetchedPartidas((fetchedPartidas) => [
         ...fetchedPartidas,
