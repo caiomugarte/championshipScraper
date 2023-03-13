@@ -1,13 +1,10 @@
-import Navegador from "./Navegador";
 import Campeonatos from "../pages/Campeonatos";
 
-import ToggleTheme from "./ToggleTheme";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "../pages/Home";
-import Desempenho from "../pages/Desempenho";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "../components/Header";
-import Banner from "../components/Banner";
 import PartidasRound from "../components/PartidasRound";
+import Desempenho from "../pages/Desempenho";
+import Home from "../pages/Home";
 
 export default function Principal() {
   return (
@@ -19,6 +16,7 @@ export default function Principal() {
           <Route path="/desempenho" element={<Desempenho />} />
           <Route path="/campeonatos" element={<Campeonatos />} />
           <Route path="/partidasRound" element={<PartidasRound />} />
+          <Route path='*' element={<div>NOT FOUND RAPAZ</div>}></Route>
         </Routes>
       </BrowserRouter>
     </div>
