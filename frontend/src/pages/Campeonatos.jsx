@@ -1,14 +1,19 @@
 import * as React from "react";
 
-import Typography from "@mui/joy/Typography";
-import Box from "@mui/joy/Box";
 import AspectRatio from "@mui/joy/AspectRatio";
-import Link from "@mui/joy/Link";
+import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import Chip from "@mui/joy/Chip";
+import Link from "@mui/joy/Link";
+import Typography from "@mui/joy/Typography";
 import csgoLogo from "../images/csgo.webp";
 
 const axios = require("axios");
+const config = {
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+  }
+}
 var campeonatos = [];
 
 function preencheCampeonatos(campeonato) {
@@ -23,7 +28,7 @@ export default function Campeonatos() {
 
   React.useEffect(() => {
     async function getData() {
-      const response = await axios.get("/liquipedia");
+      const response = await axios.get("https://team-manager-csgo.vercel.app/liquipedia");
       setcampeonatosLiquipedia(response.data);
     }
     console.log("use effect");

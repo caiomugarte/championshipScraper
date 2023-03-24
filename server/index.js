@@ -88,7 +88,14 @@ async function fetchDataPartidas(req, res) {
   });
 }
 app.use(express.static(path.resolve(__dirname, "../frontend/build")));
-
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+})
 app.listen(process.env.PORT || 3000, function () {
   console.log(
     "Express server listening on port %d in %s mode",
