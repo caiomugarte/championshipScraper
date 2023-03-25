@@ -97,7 +97,11 @@ app.listen(process.env.PORT || 3000, function () {
 });
 
 app.get('/', (req, res) => {
-  res.send('Teste Vercel Liquipedia');
+  res.send('Hey this is my API running 🥳')
+})
+
+app.get('/about', (req, res) => {
+  res.send('This is my about route..... ')
 })
 
 app.get("/api/liquipedia", (req, res) => {
