@@ -1,19 +1,16 @@
-import React from "react";
-import { useState, useRef } from "react";
-import Button from "@mui/joy/Button";
-import Box from "@mui/joy/Box";
-import Card from "@mui/joy/Card";
-import Typography from "@mui/joy/Typography";
 import AspectRatio from "@mui/joy/AspectRatio";
-import MirageFoto from "../images/mapa/mirage.jpg";
-import TextField from "@mui/joy/TextField";
-import InfernoFoto from "../images/mapa/inferno.jpg";
-import OverpassFoto from "../images/mapa/overpass.jpg";
-import DustFoto from "../images/mapa/dust.jpg";
-import { alpha } from "@mui/material";
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import Card from "@mui/joy/Card";
 import Link from "@mui/joy/Link";
-
-const axios = require("axios");
+import Typography from "@mui/joy/Typography";
+import { alpha } from "@mui/material";
+import axios from 'axios';
+import React, { useState } from "react";
+import DustFoto from "../images/mapa/dust.jpg";
+import InfernoFoto from "../images/mapa/inferno.jpg";
+import MirageFoto from "../images/mapa/mirage.jpg";
+import OverpassFoto from "../images/mapa/overpass.jpg";
 var partidas = [];
 var nomeTime = "Dancing Ratz";
 var mapaJogo;
@@ -86,7 +83,7 @@ export default function Desempenho() {
 
   React.useEffect(() => {
     async function getData() {
-      const response = await axios.get(`/partidas`);
+      const response = await axios.get(`https://team-manager-csgo.vercel.app/api/partidas`);
       //fetchedPartidas.push(response.data.partidas)
       setFetchedPartidas((fetchedPartidas) => [
         ...fetchedPartidas,

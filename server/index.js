@@ -7,11 +7,11 @@ const path = require("path");
 const meme = require("./meme");
 const cors = require("cors");
 const liquipediaURL =
-  "https://liquipedia.net/counterstrike/Qualifier_Tournaments";
+  "https://liquipedia.net/counterstrike/Qualifier_Tournaments/";
 const cheerio = require("cheerio");
 const { response } = require("express");
-
-let content = [];
+const anoStr = "2023_"
+const trimestresLiquipedia = 2
 let cachedPartidas = "";
 app.use(cors())
 function getPartidas(json) {
@@ -24,21 +24,24 @@ function getPartidas(json) {
 }
 
 function getData(html) {
-  content = [];
+  let content = [];
   const $ = cheerio.load(html);
-  $(".divRow", html).each(function () {
+  $(".gridRow", html).each(function () {
     const local = $(this)
       .find(".EventDetails.Location.Header")
       .find("a")
       .attr("title");
     const titulo = $(this).find("b").text();
-    const data = trataDate($(this).find(".EventDetails.Date.Header").text());
-    content.push({
-      titulo,
-      local,
-      data,
-    });
+    const data = $(this).find(".EventDetails.Date.Header").text();
+    if(local == "Brazil" || local == "South America"){
+      content.push({
+        titulo,
+        local,
+        data,
+      });
+    }
   });
+  return content
 }
 
 function carregaObjData(data, isInicio, isMesmoMes, ano) {
@@ -62,24 +65,13 @@ function trataDate(date) {
   }
 }
 
-async function fetchDataCampeonatos() {
-  try {
-    axios.get(liquipediaURL).then((response) => {
-      html = response.data;
-      fs.writeFile(
-        path.resolve(__dirname, "cacheData", "data.html"),
-        html,
-        function (err) {
-          if (err) {
-            return console.log(err);
-          }
-        }
-      );
-    });
-    return "";
-  } catch (error) {
-    console.log(error, error.message);
-  }
+async function getHtmlCampeonatos(trimestre) {
+  let html = "";
+  let operacao = liquipediaURL + anoStr + trimestre
+  await axios.get(operacao).then((response) => {
+    html = response.data;
+  });
+  return html;
 }
 
 async function fetchDataPartidas(req, res) {
@@ -100,19 +92,15 @@ app.get('/', (req, res) => {
   res.send('Essa é a API do DRZ running com CORS 🥳')
 })
 
-app.get("/api/liquipedia", (req, res) => {
-  cachedPartidas = fs.readFileSync(
-    path.resolve(__dirname, "cacheData", "data.html"),
-    "utf8"
-  );
-  getData(cachedPartidas);
-  res.json(content);
-  //console.log(content);
-});
-
-app.get("/api/fetchData", async (req, res) => {
-  fetchDataCampeonatos();
-  fetchDataPartidas(req, res);
+app.get("/api/liquipedia", async (req, res) => {
+  let contents = {}
+  for (let i=1; i <= trimestresLiquipedia; i++) {
+    let trimestre = "Q" + i
+    let html = await getHtmlCampeonatos(trimestre)
+    let content = getData(html)
+    contents[trimestre] = content
+  }
+  res.json(contents);
 });
 
 app.get("/api/partidas", async (req, res) => {

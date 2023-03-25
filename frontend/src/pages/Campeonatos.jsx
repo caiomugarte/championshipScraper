@@ -27,7 +27,7 @@ export default function Campeonatos() {
 
   React.useEffect(() => {
     async function getData() {
-      const response = await axios.get("https://team-manager-csgo.vercel.app/liquipedia");
+      const response = await axios.get("https://team-manager-csgo.vercel.app/api/liquipedia");
       setcampeonatosLiquipedia(response.data);
     }
     console.log("use effect");
