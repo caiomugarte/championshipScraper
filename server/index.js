@@ -97,11 +97,7 @@ app.listen(process.env.PORT || 3000, function () {
 });
 
 app.get('/', (req, res) => {
-  res.send('Hey this is my API running 🥳')
-})
-
-app.get('/about', (req, res) => {
-  res.send('This is my about route..... ')
+  res.send('Essa é a API do DRZ running 🥳')
 })
 
 app.get("/api/liquipedia", (req, res) => {
@@ -114,12 +110,12 @@ app.get("/api/liquipedia", (req, res) => {
   //console.log(content);
 });
 
-app.get("/fetchData", async (req, res) => {
+app.get("/api/fetchData", async (req, res) => {
   fetchDataCampeonatos();
   fetchDataPartidas(req, res);
 });
 
-app.get("/partidas", async (req, res) => {
+app.get("/api/partidas", async (req, res) => {
   cachedPartidas = fs.readFileSync(
     path.resolve(__dirname, "cacheData", "partidas.json"),
     "utf8"
