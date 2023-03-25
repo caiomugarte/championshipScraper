@@ -100,7 +100,7 @@ app.get('/', (req, res) => {
   res.send('Teste Vercel Liquipedia');
 })
 
-app.get("/liquipedia", (req, res) => {
+app.get("/api/liquipedia", (req, res) => {
   cachedPartidas = fs.readFileSync(
     path.resolve(__dirname, "cacheData", "data.html"),
     "utf8"
