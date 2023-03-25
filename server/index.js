@@ -5,6 +5,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const meme = require("./meme");
+const cors = require("cors");
 //const website = "https://news.sky.com";
 const liquipediaURL =
   "https://liquipedia.net/counterstrike/Qualifier_Tournaments";
@@ -88,14 +89,9 @@ async function fetchDataPartidas(req, res) {
   });
 }
 app.use(express.static(path.resolve(__dirname, "../frontend/build")));
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-})
+app.use(cors({
+  origin: '*'
+}))
 app.listen(process.env.PORT || 3000, function () {
   console.log(
     "Express server listening on port %d in %s mode",
