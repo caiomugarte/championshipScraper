@@ -88,10 +88,6 @@ async function fetchDataPartidas(req, res) {
   });
 }
 
-app.use(cors({
-  origin: '*'
-}))
-
 app.listen(process.env.PORT || 3000, function () {
   console.log(
     "Express server listening on port %d in %s mode",
@@ -101,7 +97,7 @@ app.listen(process.env.PORT || 3000, function () {
 });
 
 app.get('/', (req, res) => {
-  res.send('oi');
+  res.send('Teste Vercel Liquipedia');
 })
 
 app.get("/liquipedia", (req, res) => {
@@ -125,7 +121,6 @@ app.get("/partidas", async (req, res) => {
     "utf8"
   );
   res.json({ partidas: getPartidas(cachedPartidas) });
-  //console.log(content);
 });
 
 module.exports = app;
