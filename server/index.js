@@ -100,6 +100,10 @@ app.listen(process.env.PORT || 3000, function () {
   );
 });
 
+app.get('/'), (req, res) => {
+  res.send("OI")
+}
+
 app.get("/liquipedia", (req, res) => {
   cachedPartidas = fs.readFileSync(
     path.resolve(__dirname, "cacheData", "data.html"),
