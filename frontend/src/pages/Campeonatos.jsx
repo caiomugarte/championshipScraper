@@ -6,9 +6,8 @@ import Card from "@mui/joy/Card";
 import Chip from "@mui/joy/Chip";
 import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
+import axios from 'axios';
 import csgoLogo from "../images/csgo.webp";
-
-const axios = require("axios");
 const config = {
   headers: {
     "Access-Control-Allow-Origin": "*",

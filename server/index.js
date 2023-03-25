@@ -13,7 +13,7 @@ const { response } = require("express");
 
 let content = [];
 let cachedPartidas = "";
-
+app.use(cors())
 function getPartidas(json) {
   var content = [];
   const partidas = JSON.parse(json);
@@ -97,7 +97,7 @@ app.listen(process.env.PORT || 3000, function () {
 });
 
 app.get('/', (req, res) => {
-  res.send('Essa é a API do DRZ running 🥳')
+  res.send('Essa é a API do DRZ running com CORS 🥳')
 })
 
 app.get("/api/liquipedia", (req, res) => {
