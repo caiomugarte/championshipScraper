@@ -6,7 +6,6 @@ const fs = require("fs");
 const path = require("path");
 const meme = require("./meme");
 const cors = require("cors");
-//const website = "https://news.sky.com";
 const liquipediaURL =
   "https://liquipedia.net/counterstrike/Qualifier_Tournaments";
 const cheerio = require("cheerio");
@@ -101,32 +100,32 @@ app.listen(process.env.PORT || 3000, function () {
   );
 });
 
-app.get('/'), (req, res) => {
-  res.send("OI")
-}
+app.get('/', (req, res) => {
+  res.send('oi');
+})
 
-// app.get("/liquipedia", (req, res) => {
-//   cachedPartidas = fs.readFileSync(
-//     path.resolve(__dirname, "cacheData", "data.html"),
-//     "utf8"
-//   );
-//   getData(cachedPartidas);
-//   res.json(content);
-//   //console.log(content);
-// });
+app.get("/liquipedia", (req, res) => {
+  cachedPartidas = fs.readFileSync(
+    path.resolve(__dirname, "cacheData", "data.html"),
+    "utf8"
+  );
+  getData(cachedPartidas);
+  res.json(content);
+  //console.log(content);
+});
 
-// app.get("/fetchData", async (req, res) => {
-//   fetchDataCampeonatos();
-//   fetchDataPartidas(req, res);
-// });
+app.get("/fetchData", async (req, res) => {
+  fetchDataCampeonatos();
+  fetchDataPartidas(req, res);
+});
 
-// app.get("/partidas", async (req, res) => {
-//   cachedPartidas = fs.readFileSync(
-//     path.resolve(__dirname, "cacheData", "partidas.json"),
-//     "utf8"
-//   );
-//   res.json({ partidas: getPartidas(cachedPartidas) });
-//   //console.log(content);
-// });
+app.get("/partidas", async (req, res) => {
+  cachedPartidas = fs.readFileSync(
+    path.resolve(__dirname, "cacheData", "partidas.json"),
+    "utf8"
+  );
+  res.json({ partidas: getPartidas(cachedPartidas) });
+  //console.log(content);
+});
 
 module.exports = app;
