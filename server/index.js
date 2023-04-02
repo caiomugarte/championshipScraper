@@ -38,10 +38,9 @@ function getData(html) {
   let content = [];
   const $ = cheerio.load(html);
   $(".gridRow", html).each(function () {
-    const local = $(this)
+    const local = trataTextoHTML($(this)
       .find(".EventDetails.Location.Header")
-      .find("a")
-      .attr("title");
+      .find(".FlagText").text())
     const titulo = $(this).find("b").text();
     const data = $(this).find(".EventDetails.Date.Header").text();
     if(local == "Brazil" || local == "South America"){
@@ -53,6 +52,10 @@ function getData(html) {
     }
   });
   return content
+}
+
+function trataTextoHTML(texto) {
+  return texto.trim();
 }
 
 function carregaObjData(data, isInicio, isMesmoMes, ano) {
@@ -76,9 +79,9 @@ function trataDate(date) {
   }
 }
 
-function writePartidasJSON(partidas) {
+function writeCacheJSON(partidas, nomeArquivo) {
   fs.writeFile(
-    path.resolve(__dirname, "cacheData", "partidas.json"),
+    path.resolve(__dirname, "cacheData", nomeArquivo),
     JSON.stringify(partidas),
     function (err) {
       if (err) {
@@ -143,7 +146,7 @@ app.get("/api/getPartidasGC", async (req, res) => {
     }
   }
   partidas = getPartidas(partidasJsonFile)
-  writePartidasJSON(partidas);
+  writeCacheJSON(partidas, "partidas.json");
   res.json("Partidas Da GC Atualizadas com Sucesso");
 })
 
