@@ -12,17 +12,28 @@ const cheerio = require("cheerio");
 const { response } = require("express");
 const anoStr = "2023_"
 const trimestresLiquipedia = 2
+const partidasJsonFile = require("./cacheData/partidas.json")
 let cachedPartidas = "";
 app.use(cors())
+
 function getPartidas(json) {
-  var content = [];
-  const partidas = JSON.parse(json);
-  partidas.map((partida) => {
-    content.push(partida);
-  });
-  return content;
+  let partidas = [];
+  for(let pagina in json){
+    partidas = partidas.concat(json[pagina])
+  }
+  partidasTratadas = trataPartidas(partidas);
+  return partidasTratadas;
 }
 
+function trataPartidas(partidas) {
+  let partidasTratadas = [];
+  for (let partida in partidas){
+    if(partidas[partida]['clanTag_a'] == 'DRZ' || partidas[partida]['clanTag_b'] == 'DRZ'){
+      partidasTratadas.push(partidas[partida])
+    }
+  }
+  return partidasTratadas;
+}
 function getData(html) {
   let content = [];
   const $ = cheerio.load(html);
@@ -65,6 +76,18 @@ function trataDate(date) {
   }
 }
 
+function writePartidasJSON(partidas) {
+  fs.writeFile(
+    path.resolve(__dirname, "cacheData", "partidas.json"),
+    JSON.stringify(partidas),
+    function (err) {
+      if (err) {
+        return console.log(err);
+      }
+    }
+  );
+}
+
 async function getHtmlCampeonatos(trimestre) {
   let html = "";
   let operacao = liquipediaURL + anoStr + trimestre
@@ -103,12 +126,29 @@ app.get("/api/liquipedia", async (req, res) => {
   res.json(contents);
 });
 
-app.get("/api/partidas", async (req, res) => {
-  cachedPartidas = fs.readFileSync(
-    path.resolve(__dirname, "cacheData", "partidas.json"),
-    "utf8"
-  );
-  res.json({ partidas: getPartidas(cachedPartidas) });
-});
+app.get("/api/getPartidasGC", async (req, res) => {
+  let partidas = []
+  for (let i=1; i <= 5; i++){
+    let operacao = "https://gamersclub.com.br/players/get_playerLobbyResults/latest/" + i
+    const gclubess = "cf_clearance=pVNW3rW_Nv6AKE3AAoKG2PUuwQbNYGaju2uELquIg8E-1680360101-0-250;gclubsess=2a8c4b615dee520692cd52ba062a20c1d39e5b64";
+    let response = await axios.get(operacao, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.62",
+        cookie: gclubess,
+      }
+    });
+    let json = response.data.lista
+    if(json.length > 0){
+      partidas.push(json)
+    }
+  }
+  partidas = getPartidas(partidasJsonFile)
+  writePartidasJSON(partidas);
+  res.json("Partidas Da GC Atualizadas com Sucesso");
+})
+
+app.get('/partidas.json', (req, res) => {
+  res.sendFile(path.resolve(__dirname, "cacheData", "partidas.json"));
+})
 
 module.exports = app;
