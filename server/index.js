@@ -133,20 +133,26 @@ app.get("/api/getPartidasGC", async (req, res) => {
   let partidas = []
   for (let i=1; i <= 5; i++){
     let operacao = "https://gamersclub.com.br/players/get_playerLobbyResults/latest/" + i
-    const gclubess = "cf_clearance=pVNW3rW_Nv6AKE3AAoKG2PUuwQbNYGaju2uELquIg8E-1680360101-0-250;gclubsess=2a8c4b615dee520692cd52ba062a20c1d39e5b64";
-    let response = await axios.get(operacao, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.62",
-        cookie: gclubess,
-      }
-    });
+    const gclubess = "cf_clearance=kLXTQaDEXLjkvPf2dmNcRpyDuzO5UxNUisQRVXUA5VA-1680441611-0-160;gclubsess=2a8c4b615dee520692cd52ba062a20c1d39e5b64";
+    let response;
+    try {
+      response = await axios.get(operacao, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.62",
+          cookie: gclubess,
+        }
+      });
+    } catch (error) {
+      console.log(error)
+      res.send(error)
+    }
+    
     let json = response.data.lista
     if(json.length > 0){
       partidas.push(json)
     }
   }
-  partidas = getPartidas(partidasJsonFile)
-  writeCacheJSON(partidas, "partidas.json");
+  writeCacheJSON(getPartidas(partidas), "partidas.json");
   res.json("Partidas Da GC Atualizadas com Sucesso");
 })
 
